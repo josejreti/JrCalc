@@ -25,26 +25,30 @@ public class Calculadora {
                 pilha.push(aux);
                 aux = "";
             } else if (isOperador(c)) {
-                double op2 = Double.parseDouble(pilha.pop());
-                double op1 = Double.parseDouble(pilha.pop());
-                double res = 0;
-                switch (c) {
-                    case '/':
-                        if (op2 == 0)
-                            return "Expressão Inválida!";
-                        else res = op1 / op2;
-                        break;
-                    case '*':
-                        res = op1 * op2;
-                        break;
-                    case '+':
-                        res = op1 + op2;
-                        break;
-                    case '-':
-                        res = op1 - op2;
-                        break;
-                }
-                pilha.push(Double.toString(res));
+                String op1s = pilha.pop();
+                String op2s = pilha.pop();
+                if (isNumeric(op1s) && isNumeric(op2s)) {
+                    double op2 = Double.parseDouble(op1s);
+                    double op1 = Double.parseDouble(op2s);
+                    double res = 0;
+                    switch (c) {
+                        case '/':
+                            if (op2 == 0)
+                                return "Expressão Inválida! Divisão por Zero!";
+                            else res = op1 / op2;
+                            break;
+                        case '*':
+                            res = op1 * op2;
+                            break;
+                        case '+':
+                            res = op1 + op2;
+                            break;
+                        case '-':
+                            res = op1 - op2;
+                            break;
+                    }
+                    pilha.push(Double.toString(res));
+                }else return "Expressão Inválida! Operadores Não Númericos";
             } else aux += c;
         }
         return pilha.pop();
@@ -68,6 +72,15 @@ public class Calculadora {
         while (!pilha.empty())
             resultado += pilha.pop();
         return resultado;
+    }
+
+    private static boolean isNumeric(String s) {
+        try {
+            Double.parseDouble(s);
+            return true;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
     }
 
     private static boolean isOperador(char c) {
